@@ -1,0 +1,142 @@
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="rethink_inline.css" />
+
+#+TITLE: A Git taster
+
+* Setup
+
+#+begin_src shell
+  git clone git@github.com:tlestang/git-taster.git
+  cd git-taster
+#+end_src
+
+* Telling Git who you are
+
+Git tracks changes in your projects by recording what was changed,
+when, and by whom. Therefore, before you can use it, you need to tell
+git who you are.
+
+#+begin_src shell
+  git config --global user.name <username>
+  git config --global user.email <email>
+#+end_src
+
+Note that "who you are" is completely up to you. You can choose to use
+your name, or a pseudonym. This information is required by Git only to
+attach this metada to different versions of your code, and this
+metadata is only located within your computer. It will however be made
+public on the internet when you publish these versions.
+
+In my case, this would look like
+
+#+begin_src shell
+  git config --global user.name "Thibault Lestang"
+  git config --global user.email t.lestang@imperial.ac.uk
+#+end_src
+
+* You first commit!
+
+We start with a small Python script that reads some example data from
+disk:
+
+#+begin_src python
+  import numpy as np
+
+  filename = "data/example_data.csv"
+  data = np.loadtxt(filename, delimiter=",", skiprows=1)
+#+end_src
+
+1. Let's add a couple of lines to plot the data
+   #+begin_src python
+     import matplotlib.pyplot as plt
+     plt.plot(data[:, 0], data[:, 1], "ro")
+   #+end_src
+2. Check the status of your project
+   #+begin_src shell
+     git status
+   #+end_src
+3. Record a new version (or /revision/, or /commit/) including your
+   changes:
+   #+begin_src shell
+     git commit -am "Plot input data"
+   #+end_src
+
+* Getting used to work with Git
+
+1. Now, let's fit our data using a second order polynomial
+   #+begin_src python
+     def model(x, p1, p2):
+	 return p1 * np.cos(p2 * x) + p2 * np.sin(p1 * x)
+
+     from scipy.optimize import curve_fit
+     popt, pcov = curve_fit(model, data[:, 0], data[:, 1], p0=(1, 0.2))
+     print(f"The parameters are p1 = {popt[0]} and p2 = {popt[1]}")
+   #+end_src
+
+2. Record a new snapshot with =git commit=:
+   
+   #+begin_src shell
+     git commit -am "Fit data with second order polynomial"
+   #+end_src
+   
+3. use =git diff= to ask Git to show the difference between the
+   current state of your project and the last recorded snapshot.
+   
+   #+begin_src shell
+     git diff
+   #+end_src
+   
+4. Let's change out mind: modify the call to =plt.plot= to display the
+   data points as stars instead of circles:
+   #+begin_src shell
+     plt.plot(data[:, 0], data[:, 1], "r*")
+   #+end_src
+5. Record a new snapshot with =git commit=
+   
+   #+begin_src shell
+     git commit -am "Plot data with stars instead of circles"
+   #+end_src
+
+* Showing versions and the history
+
+1. Use =git show= to ask Git to display the changes introduced by the
+   last recorded snapshot
+  
+   #+begin_src shell
+     git show HEAD
+   #+end_src
+   
+2. Or the one before that
+   #+begin_src shell
+     git show HEAD~1
+   #+end_src
+    
+3. Display to history of all recorded versions using =git log=
+   #+begin_src shell
+     git log
+   #+end_src
+
+4. By default, =git diff= displays the changes between the current
+   state of the project and the last recorded snapshot. But given two
+   commit version identifiers (=git diff id1 id2=), Git displays the
+   difference between the two versions. Version identifiers are
+   displayed by =git log= as 40-digit long hexadecimal numbers. Use
+   =git diff= to display the difference(s) between two versions.
+
+* Time travel!
+
+Git is more more than a fancy logging system.
+
+1. Use =git checkout= to restore you the state of the project exactly
+   as it was after you logged your second version. You'll need to look
+   up the identifier for the second revision using =git log=, then
+
+   #+begin_src shell
+     # For example - your identifier number will be different
+     git checkout a20dd4239b418e83bd1ba3928ed75f98d6621fc5
+   #+end_src
+
+2. Look around, then travel back to present times
+
+   #+begin_src shell
+     git checkout main
+   #+end_src
