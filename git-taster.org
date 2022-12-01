@@ -140,3 +140,58 @@ Git is more more than a fancy logging system.
    #+begin_src shell
      git checkout main
    #+end_src
+
+* Let's branch out
+
+Git is very popular for its branching model that allows to work on
+parallel lines of developement. See for yourself:
+
+1. Let's visit the first version you recorded today. Use =git log= to
+   find its identifier to use with =git checkout=, or
+   #+begin_src shell
+     git checkout HEAD~2 # Back 2 verions before the top one
+   #+end_src
+
+2. Start a new branch called =docs= from this version
+   #+begin_src shell
+     git switch -c docs
+   #+end_src
+
+3. Add a "documentation string" at the top of the script =fit_noisy_data.py=
+   #+begin_src python
+     """
+     This is a example python script that plots some data
+     """
+     import numpy as np
+
+     filename = "example_data.csv"
+     # ...
+   #+end_src
+
+4. Record a new version with the new docstring
+   #+begin_src shell
+     git commit -am "Add a docstring"
+   #+end_src
+
+5. Visualise the history with
+   #+begin_src shell
+     git log --graph --all
+   #+end_src
+
+6. Let's merge our branch =docs= into the main trunk (branch called
+   =main=). First, get back to the =main= trunk:
+   #+begin_src shell
+     git checkout main
+   #+end_src
+
+7. Finally, merge the =docs= branch into the main trunk:
+   #+begin_src shell
+     git merge docs
+   #+end_src
+
+8. Visualise the merged history with
+   #+begin_src shell
+     git log --graph --all
+   #+end_src
+
+   You can also try to add the =--oneline= option to =git log=.

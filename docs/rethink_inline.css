@@ -7,6 +7,10 @@
     --font-size-xsmall: 0.6rem;
 }
 
+html{
+    font-size: 1vw;
+}
+
 /* Set padding and margin */html, body{
     padding: 0;    margin: 0;    background-color: #fdfdfd;
 }

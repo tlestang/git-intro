@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-12-01 Thu 21:20 -->
+<!-- 2022-12-01 Thu 22:14 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Version control with Git: a taster</title>
@@ -202,29 +202,30 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org8f1ced2">1. Setup</a></li>
-<li><a href="#org815079d">2. Telling Git who you are</a></li>
-<li><a href="#orgcf2452d">3. You first commit!</a></li>
-<li><a href="#org24b40b0">4. Change, commit, repeat.</a></li>
-<li><a href="#org1ffdea3">5. Showing versions and the history</a></li>
-<li><a href="#org750b917">6. Time travel!</a></li>
+<li><a href="#orgff4e57b">1. Setup</a></li>
+<li><a href="#org2627260">2. Telling Git who you are</a></li>
+<li><a href="#org95a7267">3. You first commit!</a></li>
+<li><a href="#org1ecc1d3">4. Change, commit, repeat.</a></li>
+<li><a href="#orgfd672d1">5. Showing versions and the history</a></li>
+<li><a href="#orgd22308f">6. Time travel!</a></li>
+<li><a href="#orge201507">7. Let's branch out</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org8f1ced2" class="outline-2">
-<h2 id="org8f1ced2"><span class="section-number-2">1.</span> Setup</h2>
+<div id="outline-container-orgff4e57b" class="outline-2">
+<h2 id="orgff4e57b"><span class="section-number-2">1.</span> Setup</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
 <pre class="src src-shell">git clone git@github.com:tlestang/git-intro.git
-cd git-intro/taster
+<span style="color: #483d8b;">cd</span> git-intro/taster
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org815079d" class="outline-2">
-<h2 id="org815079d"><span class="section-number-2">2.</span> Telling Git who you are</h2>
+<div id="outline-container-org2627260" class="outline-2">
+<h2 id="org2627260"><span class="section-number-2">2.</span> Telling Git who you are</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Git tracks changes in your projects by recording what was changed,
@@ -251,15 +252,15 @@ In my case, this would look like
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">git config --global user.name "Thibault Lestang"
+<pre class="src src-shell">git config --global user.name <span style="color: #8b2252;">"Thibault Lestang"</span>
 git config --global user.email t.lestang@imperial.ac.uk
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgcf2452d" class="outline-2">
-<h2 id="orgcf2452d"><span class="section-number-2">3.</span> You first commit!</h2>
+<div id="outline-container-org95a7267" class="outline-2">
+<h2 id="org95a7267"><span class="section-number-2">3.</span> You first commit!</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 We start with a small Python script that reads some example data from
@@ -267,10 +268,10 @@ disk:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python">import numpy as np
+<pre class="src src-python"><span style="color: #a020f0;">import</span> numpy <span style="color: #a020f0;">as</span> np
 
-filename = "example_data.csv"
-data = np.loadtxt(filename, delimiter=",")
+<span style="color: #a0522d;">filename</span> = <span style="color: #8b2252;">"example_data.csv"</span>
+<span style="color: #a0522d;">data</span> = np.loadtxt(filename, delimiter=<span style="color: #8b2252;">","</span>)
 </pre>
 </div>
 
@@ -279,8 +280,8 @@ data = np.loadtxt(filename, delimiter=",")
 Let's add a couple of lines to plot the data
 </p>
 <div class="org-src-container">
-<pre class="src src-python">import matplotlib.pyplot as plt
-plt.plot(data[:, 0], data[:, 1], "ro")
+<pre class="src src-python"><span style="color: #a020f0;">import</span> matplotlib.pyplot <span style="color: #a020f0;">as</span> plt
+plt.plot(data[:, 0], data[:, 1], <span style="color: #8b2252;">"ro"</span>)
 </pre>
 </div></li>
 <li><p>
@@ -295,27 +296,27 @@ Record a new version (or <i>revision</i>, or <i>commit</i>) including your
 changes:
 </p>
 <div class="org-src-container">
-<pre class="src src-shell">git commit -am "Plot input data"
+<pre class="src src-shell">git commit -am <span style="color: #8b2252;">"Plot input data"</span>
 </pre>
 </div></li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-org24b40b0" class="outline-2">
-<h2 id="org24b40b0"><span class="section-number-2">4.</span> Change, commit, repeat.</h2>
+<div id="outline-container-org1ecc1d3" class="outline-2">
+<h2 id="org1ecc1d3"><span class="section-number-2">4.</span> Change, commit, repeat.</h2>
 <div class="outline-text-2" id="text-4">
 <ol class="org-ol">
 <li><p>
 Now, let's fit our data using a second order polynomial
 </p>
 <div class="org-src-container">
-<pre class="src src-python">def model(x, p1, p2):
-    return p1 * np.cos(p2 * x) + p2 * np.sin(p1 * x)
+<pre class="src src-python"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">model</span>(x, p1, p2):
+    <span style="color: #a020f0;">return</span> p1 * np.cos(p2 * x) + p2 * np.sin(p1 * x)
 
-from scipy.optimize import curve_fit
-popt, pcov = curve_fit(model, data[:, 0], data[:, 1], p0=(1, 0.2))
-print(f"The parameters are p1 = {popt[0]} and p2 = {popt[1]}")
+<span style="color: #a020f0;">from</span> scipy.optimize <span style="color: #a020f0;">import</span> curve_fit
+<span style="color: #a0522d;">popt</span>, <span style="color: #a0522d;">pcov</span> = curve_fit(model, data[:, 0], data[:, 1], p0=(1, 0.2))
+<span style="color: #483d8b;">print</span>(f<span style="color: #8b2252;">"The parameters are p1 = </span>{popt[0]}<span style="color: #8b2252;"> and p2 = </span>{popt[1]}<span style="color: #8b2252;">"</span>)
 </pre>
 </div></li>
 
@@ -324,7 +325,7 @@ Record a new snapshot with <code>git commit</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">git commit -am "Fit data with second order polynomial"
+<pre class="src src-shell">git commit -am <span style="color: #8b2252;">"Fit data with second order polynomial"</span>
 </pre>
 </div></li>
 
@@ -343,7 +344,7 @@ Let's change out mind: modify the call to <code>plt.plot</code> to display the
 data points as stars instead of circles:
 </p>
 <div class="org-src-container">
-<pre class="src src-shell">plt.plot(data[:, 0], data[:, 1], "r*")
+<pre class="src src-shell"><span style="color: #0000ff;">plt.plot</span>(data[:, 0], data[:, 1], <span style="color: #8b2252;">"r*"</span>)
 </pre>
 </div></li>
 <li><p>
@@ -351,15 +352,15 @@ Record a new snapshot with <code>git commit</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">git commit -am "Plot data with stars instead of circles"
+<pre class="src src-shell">git commit -am <span style="color: #8b2252;">"Plot data with stars instead of circles"</span>
 </pre>
 </div></li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-org1ffdea3" class="outline-2">
-<h2 id="org1ffdea3"><span class="section-number-2">5.</span> Showing versions and the history</h2>
+<div id="outline-container-orgfd672d1" class="outline-2">
+<h2 id="orgfd672d1"><span class="section-number-2">5.</span> Showing versions and the history</h2>
 <div class="outline-text-2" id="text-5">
 <ol class="org-ol">
 <li><p>
@@ -398,8 +399,8 @@ displayed by <code>git log</code> as 40-digit long hexadecimal numbers. Use
 </div>
 </div>
 
-<div id="outline-container-org750b917" class="outline-2">
-<h2 id="org750b917"><span class="section-number-2">6.</span> Time travel!</h2>
+<div id="outline-container-orgd22308f" class="outline-2">
+<h2 id="orgd22308f"><span class="section-number-2">6.</span> Time travel!</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Git is more more than a fancy logging system.
@@ -413,7 +414,7 @@ up the identifier for the second revision using <code>git log</code>, then
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell"># For example - your identifier number will be different
+<pre class="src src-shell"><span style="color: #b22222;"># </span><span style="color: #b22222;">For example - your identifier number will be different</span>
 git checkout a20dd4239b418e83bd1ba3928ed75f98d6621fc5
 </pre>
 </div></li>
@@ -429,10 +430,98 @@ Look around, then travel back to present times
 </ol>
 </div>
 </div>
+
+<div id="outline-container-orge201507" class="outline-2">
+<h2 id="orge201507"><span class="section-number-2">7.</span> Let's branch out</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+Git is very popular for its branching model that allows to work on
+parallel lines of developement. See for yourself:
+</p>
+
+<ol class="org-ol">
+<li><p>
+Let's visit the first version you recorded today. Use <code>git log</code> to
+find its identifier to use with <code>git checkout</code>, or
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">git checkout HEAD~2 <span style="color: #b22222;"># </span><span style="color: #b22222;">Back 2 verions before the top one</span>
+</pre>
+</div></li>
+
+<li><p>
+Start a new branch called <code>docs</code> from this version
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">git switch -c docs
+</pre>
+</div></li>
+
+<li><p>
+Add a "documentation string" at the top of the script <code>fit_noisy_data.py</code>
+</p>
+<div class="org-src-container">
+<pre class="src src-python"><span style="color: #8b2252;">"""</span>
+<span style="color: #8b2252;">This is a example python script that plots some data</span>
+<span style="color: #8b2252;">"""</span>
+<span style="color: #a020f0;">import</span> numpy <span style="color: #a020f0;">as</span> np
+
+<span style="color: #a0522d;">filename</span> = <span style="color: #8b2252;">"example_data.csv"</span>
+<span style="color: #b22222;"># </span><span style="color: #b22222;">...</span>
+</pre>
+</div></li>
+
+<li><p>
+Record a new version with the new docstring
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">git commit -am <span style="color: #8b2252;">"Add a docstring"</span>
+</pre>
+</div></li>
+
+<li><p>
+Visualise the history with
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">git log --graph --all
+</pre>
+</div></li>
+
+<li><p>
+Let's merge our branch <code>docs</code> into the main trunk (branch called
+<code>main</code>). First, get back to the <code>main</code> trunk:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">git checkout main
+</pre>
+</div></li>
+
+<li><p>
+Finally, merge the <code>docs</code> branch into the main trunk:
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">git merge docs
+</pre>
+</div></li>
+
+<li><p>
+Visualise the merged history with
+</p>
+<div class="org-src-container">
+<pre class="src src-shell">git log --graph --all
+</pre>
+</div>
+
+<p>
+You can also try to add the <code>--oneline</code> option to <code>git log</code>.
+</p></li>
+</ol>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Thibault Lestang</p>
-<p class="date">Created: 2022-12-01 Thu 21:20</p>
+<p class="date">Created: 2022-12-01 Thu 22:14</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
