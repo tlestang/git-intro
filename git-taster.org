@@ -1,6 +1,6 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="rethink_inline.css" />
 
-#+TITLE: A Git taster
+#+TITLE: Version control with Git: a taster
 
 * Setup
 
