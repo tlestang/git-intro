@@ -3,16 +3,13 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-11-29 Tue 19:41 -->
+<!-- 2022-12-01 Thu 21:20 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>A Git taster</title>
+<title>Version control with Git: a taster</title>
 <meta name="author" content="Thibault Lestang" />
 <meta name="generator" content="Org Mode" />
 <style>
-  html {
-      font-size: 1vw
-  }
   #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
@@ -194,40 +191,40 @@
     { font-size: 10px; font-weight: bold; white-space: nowrap; }
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
-  .org-svg { width: 90%; }
+  .org-svg { }
 </style>
 <link rel="stylesheet" type="text/css" href="rethink_inline.css" />
 </head>
 <body>
 <div id="content" class="content">
-<h1 class="title">A Git taster</h1>
+<h1 class="title">Version control with Git: a taster</h1>
 <div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgc97000e">1. Setup</a></li>
-<li><a href="#org695df4a">2. Telling Git who you are</a></li>
-<li><a href="#org7d75b8a">3. You first commit!</a></li>
-<li><a href="#org91ac152">4. Getting used to work with Git</a></li>
-<li><a href="#orgb762793">5. Showing versions and the history</a></li>
-<li><a href="#org490ac1c">6. Time travel!</a></li>
+<li><a href="#org8f1ced2">1. Setup</a></li>
+<li><a href="#org815079d">2. Telling Git who you are</a></li>
+<li><a href="#orgcf2452d">3. You first commit!</a></li>
+<li><a href="#org24b40b0">4. Change, commit, repeat.</a></li>
+<li><a href="#org1ffdea3">5. Showing versions and the history</a></li>
+<li><a href="#org750b917">6. Time travel!</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgc97000e" class="outline-2">
-<h2 id="orgc97000e"><span class="section-number-2">1.</span> Setup</h2>
+<div id="outline-container-org8f1ced2" class="outline-2">
+<h2 id="org8f1ced2"><span class="section-number-2">1.</span> Setup</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
-<pre class="src src-shell">git clone git@github.com:tlestang/git-taster.git
-<span style="color: #483d8b;">cd</span> git-taster
+<pre class="src src-shell">git clone git@github.com:tlestang/git-intro.git
+cd git-intro/taster
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org695df4a" class="outline-2">
-<h2 id="org695df4a"><span class="section-number-2">2.</span> Telling Git who you are</h2>
+<div id="outline-container-org815079d" class="outline-2">
+<h2 id="org815079d"><span class="section-number-2">2.</span> Telling Git who you are</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Git tracks changes in your projects by recording what was changed,
@@ -254,15 +251,15 @@ In my case, this would look like
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">git config --global user.name <span style="color: #8b2252;">"Thibault Lestang"</span>
+<pre class="src src-shell">git config --global user.name "Thibault Lestang"
 git config --global user.email t.lestang@imperial.ac.uk
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org7d75b8a" class="outline-2">
-<h2 id="org7d75b8a"><span class="section-number-2">3.</span> You first commit!</h2>
+<div id="outline-container-orgcf2452d" class="outline-2">
+<h2 id="orgcf2452d"><span class="section-number-2">3.</span> You first commit!</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 We start with a small Python script that reads some example data from
@@ -270,10 +267,10 @@ disk:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #a020f0;">import</span> numpy <span style="color: #a020f0;">as</span> np
+<pre class="src src-python">import numpy as np
 
-<span style="color: #a0522d;">filename</span> = <span style="color: #8b2252;">"data/example_data.csv"</span>
-<span style="color: #a0522d;">data</span> = np.loadtxt(filename, delimiter=<span style="color: #8b2252;">","</span>, skiprows=1)
+filename = "example_data.csv"
+data = np.loadtxt(filename, delimiter=",")
 </pre>
 </div>
 
@@ -282,8 +279,8 @@ disk:
 Let's add a couple of lines to plot the data
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #a020f0;">import</span> matplotlib.pyplot <span style="color: #a020f0;">as</span> plt
-plt.plot(data[:, 0], data[:, 1], <span style="color: #8b2252;">"ro"</span>)
+<pre class="src src-python">import matplotlib.pyplot as plt
+plt.plot(data[:, 0], data[:, 1], "ro")
 </pre>
 </div></li>
 <li><p>
@@ -298,27 +295,27 @@ Record a new version (or <i>revision</i>, or <i>commit</i>) including your
 changes:
 </p>
 <div class="org-src-container">
-<pre class="src src-shell">git commit -am <span style="color: #8b2252;">"Plot input data"</span>
+<pre class="src src-shell">git commit -am "Plot input data"
 </pre>
 </div></li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-org91ac152" class="outline-2">
-<h2 id="org91ac152"><span class="section-number-2">4.</span> Getting used to work with Git</h2>
+<div id="outline-container-org24b40b0" class="outline-2">
+<h2 id="org24b40b0"><span class="section-number-2">4.</span> Change, commit, repeat.</h2>
 <div class="outline-text-2" id="text-4">
 <ol class="org-ol">
 <li><p>
 Now, let's fit our data using a second order polynomial
 </p>
 <div class="org-src-container">
-<pre class="src src-python"><span style="color: #a020f0;">def</span> <span style="color: #0000ff;">model</span>(x, p1, p2):
-    <span style="color: #a020f0;">return</span> p1 * np.cos(p2 * x) + p2 * np.sin(p1 * x)
+<pre class="src src-python">def model(x, p1, p2):
+    return p1 * np.cos(p2 * x) + p2 * np.sin(p1 * x)
 
-<span style="color: #a020f0;">from</span> scipy.optimize <span style="color: #a020f0;">import</span> curve_fit
-<span style="color: #a0522d;">popt</span>, <span style="color: #a0522d;">pcov</span> = curve_fit(model, data[:, 0], data[:, 1], p0=(1, 0.2))
-<span style="color: #a020f0;">print</span>(f<span style="color: #8b2252;">"The parameters are p1 = {popt[0]} and p2 = {popt[1]}"</span>)
+from scipy.optimize import curve_fit
+popt, pcov = curve_fit(model, data[:, 0], data[:, 1], p0=(1, 0.2))
+print(f"The parameters are p1 = {popt[0]} and p2 = {popt[1]}")
 </pre>
 </div></li>
 
@@ -327,7 +324,7 @@ Record a new snapshot with <code>git commit</code>:
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">git commit -am <span style="color: #8b2252;">"Fit data with second order polynomial"</span>
+<pre class="src src-shell">git commit -am "Fit data with second order polynomial"
 </pre>
 </div></li>
 
@@ -346,7 +343,7 @@ Let's change out mind: modify the call to <code>plt.plot</code> to display the
 data points as stars instead of circles:
 </p>
 <div class="org-src-container">
-<pre class="src src-shell"><span style="color: #0000ff;">plt.plot</span>(data[:, 0], data[:, 1], <span style="color: #8b2252;">"r*"</span>)
+<pre class="src src-shell">plt.plot(data[:, 0], data[:, 1], "r*")
 </pre>
 </div></li>
 <li><p>
@@ -354,15 +351,15 @@ Record a new snapshot with <code>git commit</code>
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell">git commit -am <span style="color: #8b2252;">"Plot data with stars instead of circles"</span>
+<pre class="src src-shell">git commit -am "Plot data with stars instead of circles"
 </pre>
 </div></li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-orgb762793" class="outline-2">
-<h2 id="orgb762793"><span class="section-number-2">5.</span> Showing versions and the history</h2>
+<div id="outline-container-org1ffdea3" class="outline-2">
+<h2 id="org1ffdea3"><span class="section-number-2">5.</span> Showing versions and the history</h2>
 <div class="outline-text-2" id="text-5">
 <ol class="org-ol">
 <li><p>
@@ -401,8 +398,8 @@ displayed by <code>git log</code> as 40-digit long hexadecimal numbers. Use
 </div>
 </div>
 
-<div id="outline-container-org490ac1c" class="outline-2">
-<h2 id="org490ac1c"><span class="section-number-2">6.</span> Time travel!</h2>
+<div id="outline-container-org750b917" class="outline-2">
+<h2 id="org750b917"><span class="section-number-2">6.</span> Time travel!</h2>
 <div class="outline-text-2" id="text-6">
 <p>
 Git is more more than a fancy logging system.
@@ -416,7 +413,7 @@ up the identifier for the second revision using <code>git log</code>, then
 </p>
 
 <div class="org-src-container">
-<pre class="src src-shell"><span style="color: #b22222;"># </span><span style="color: #b22222;">For example - your identifier number will be different</span>
+<pre class="src src-shell"># For example - your identifier number will be different
 git checkout a20dd4239b418e83bd1ba3928ed75f98d6621fc5
 </pre>
 </div></li>
@@ -435,7 +432,7 @@ Look around, then travel back to present times
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: Thibault Lestang</p>
-<p class="date">Created: 2022-11-29 Tue 19:41</p>
+<p class="date">Created: 2022-12-01 Thu 21:20</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

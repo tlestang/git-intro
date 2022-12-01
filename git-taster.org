@@ -5,8 +5,8 @@
 * Setup
 
 #+begin_src shell
-  git clone git@github.com:tlestang/git-taster.git
-  cd git-taster
+  git clone git@github.com:tlestang/git-intro.git
+  cd git-intro/taster
 #+end_src
 
 * Telling Git who you are
@@ -41,8 +41,8 @@ disk:
 #+begin_src python
   import numpy as np
 
-  filename = "data/example_data.csv"
-  data = np.loadtxt(filename, delimiter=",", skiprows=1)
+  filename = "example_data.csv"
+  data = np.loadtxt(filename, delimiter=",")
 #+end_src
 
 1. Let's add a couple of lines to plot the data
@@ -60,7 +60,7 @@ disk:
      git commit -am "Plot input data"
    #+end_src
 
-* Getting used to work with Git
+* Change, commit, repeat.
 
 1. Now, let's fit our data using a second order polynomial
    #+begin_src python
