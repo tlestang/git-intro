@@ -1,11 +1,17 @@
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="rethink_inline.css" />
 
 #+TITLE: Version control with Git: a taster
+#+AUTHOR: Thibault Lestang
+#+DATE: <2022-12-02 Fri>
+
+* Tutorial location                                                :noexport:
+
+https://tlestang.github.io/git-intro/git-taster.html
 
 * Setup
 
 #+begin_src shell
-  git clone git@github.com:tlestang/git-intro.git
+  git clone https://github.com/tlestang/git-intro.git
   cd git-intro/taster
 #+end_src
 
@@ -31,6 +37,21 @@ In my case, this would look like
 #+begin_src shell
   git config --global user.name "Thibault Lestang"
   git config --global user.email t.lestang@imperial.ac.uk
+#+end_src
+
+* Setting the default branch name
+
+Next, you must to set the default branch name.
+
+One of Git's most popular feature is the ability to easily track
+several parallel stream of changes (think of different development
+versions) called /branches/. When you start a project, you start with
+a default branch.
+
+We can set its name with
+
+#+begin_src shell
+  git config --global init.defaultBranch main
 #+end_src
 
 * You first commit!
@@ -73,25 +94,25 @@ disk:
    #+end_src
 
 2. Record a new snapshot with =git commit=:
-   
+
    #+begin_src shell
      git commit -am "Fit data with second order polynomial"
    #+end_src
-   
+
 3. use =git diff= to ask Git to show the difference between the
    current state of your project and the last recorded snapshot.
-   
+
    #+begin_src shell
      git diff
    #+end_src
-   
+
 4. Let's change out mind: modify the call to =plt.plot= to display the
    data points as stars instead of circles:
    #+begin_src shell
      plt.plot(data[:, 0], data[:, 1], "r*")
    #+end_src
 5. Record a new snapshot with =git commit=
-   
+
    #+begin_src shell
      git commit -am "Plot data with stars instead of circles"
    #+end_src
@@ -100,16 +121,16 @@ disk:
 
 1. Use =git show= to ask Git to display the changes introduced by the
    last recorded snapshot
-  
+
    #+begin_src shell
      git show HEAD
    #+end_src
-   
+
 2. Or the one before that
    #+begin_src shell
      git show HEAD~1
    #+end_src
-    
+
 3. Display to history of all recorded versions using =git log=
    #+begin_src shell
      git log

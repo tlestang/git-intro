@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-12-01 Thu 22:14 -->
+<!-- 2022-12-02 Fri 09:08 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Version control with Git: a taster</title>
@@ -202,30 +202,31 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgff4e57b">1. Setup</a></li>
-<li><a href="#org2627260">2. Telling Git who you are</a></li>
-<li><a href="#org95a7267">3. You first commit!</a></li>
-<li><a href="#org1ecc1d3">4. Change, commit, repeat.</a></li>
-<li><a href="#orgfd672d1">5. Showing versions and the history</a></li>
-<li><a href="#orgd22308f">6. Time travel!</a></li>
-<li><a href="#orge201507">7. Let's branch out</a></li>
+<li><a href="#org6da0bea">1. Setup</a></li>
+<li><a href="#orga3f9cbc">2. Telling Git who you are</a></li>
+<li><a href="#orgfff2866">3. Setting the default branch name</a></li>
+<li><a href="#org8f67715">4. You first commit!</a></li>
+<li><a href="#orge2fc2c8">5. Change, commit, repeat.</a></li>
+<li><a href="#orgb585372">6. Showing versions and the history</a></li>
+<li><a href="#org0485e71">7. Time travel!</a></li>
+<li><a href="#org6dcab9c">8. Let's branch out</a></li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-orgff4e57b" class="outline-2">
-<h2 id="orgff4e57b"><span class="section-number-2">1.</span> Setup</h2>
+<div id="outline-container-org6da0bea" class="outline-2">
+<h2 id="org6da0bea"><span class="section-number-2">1.</span> Setup</h2>
 <div class="outline-text-2" id="text-1">
 <div class="org-src-container">
-<pre class="src src-shell">git clone git@github.com:tlestang/git-intro.git
+<pre class="src src-shell">git clone https://github.com/tlestang/git-intro.git
 <span style="color: #483d8b;">cd</span> git-intro/taster
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org2627260" class="outline-2">
-<h2 id="org2627260"><span class="section-number-2">2.</span> Telling Git who you are</h2>
+<div id="outline-container-orga3f9cbc" class="outline-2">
+<h2 id="orga3f9cbc"><span class="section-number-2">2.</span> Telling Git who you are</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Git tracks changes in your projects by recording what was changed,
@@ -259,9 +260,34 @@ git config --global user.email t.lestang@imperial.ac.uk
 </div>
 </div>
 
-<div id="outline-container-org95a7267" class="outline-2">
-<h2 id="org95a7267"><span class="section-number-2">3.</span> You first commit!</h2>
+<div id="outline-container-orgfff2866" class="outline-2">
+<h2 id="orgfff2866"><span class="section-number-2">3.</span> Setting the default branch name</h2>
 <div class="outline-text-2" id="text-3">
+<p>
+Next, you must to set the default branch name.
+</p>
+
+<p>
+One of Git's most popular feature is the ability to easily track
+several parallel stream of changes (think of different development
+versions) called <i>branches</i>. When you start a project, you start with
+a default branch.
+</p>
+
+<p>
+We can set its name with
+</p>
+
+<div class="org-src-container">
+<pre class="src src-shell">git config --global init.defaultBranch main
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org8f67715" class="outline-2">
+<h2 id="org8f67715"><span class="section-number-2">4.</span> You first commit!</h2>
+<div class="outline-text-2" id="text-4">
 <p>
 We start with a small Python script that reads some example data from
 disk:
@@ -303,9 +329,9 @@ changes:
 </div>
 </div>
 
-<div id="outline-container-org1ecc1d3" class="outline-2">
-<h2 id="org1ecc1d3"><span class="section-number-2">4.</span> Change, commit, repeat.</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-orge2fc2c8" class="outline-2">
+<h2 id="orge2fc2c8"><span class="section-number-2">5.</span> Change, commit, repeat.</h2>
+<div class="outline-text-2" id="text-5">
 <ol class="org-ol">
 <li><p>
 Now, let's fit our data using a second order polynomial
@@ -359,9 +385,9 @@ Record a new snapshot with <code>git commit</code>
 </div>
 </div>
 
-<div id="outline-container-orgfd672d1" class="outline-2">
-<h2 id="orgfd672d1"><span class="section-number-2">5.</span> Showing versions and the history</h2>
-<div class="outline-text-2" id="text-5">
+<div id="outline-container-orgb585372" class="outline-2">
+<h2 id="orgb585372"><span class="section-number-2">6.</span> Showing versions and the history</h2>
+<div class="outline-text-2" id="text-6">
 <ol class="org-ol">
 <li><p>
 Use <code>git show</code> to ask Git to display the changes introduced by the
@@ -399,9 +425,9 @@ displayed by <code>git log</code> as 40-digit long hexadecimal numbers. Use
 </div>
 </div>
 
-<div id="outline-container-orgd22308f" class="outline-2">
-<h2 id="orgd22308f"><span class="section-number-2">6.</span> Time travel!</h2>
-<div class="outline-text-2" id="text-6">
+<div id="outline-container-org0485e71" class="outline-2">
+<h2 id="org0485e71"><span class="section-number-2">7.</span> Time travel!</h2>
+<div class="outline-text-2" id="text-7">
 <p>
 Git is more more than a fancy logging system.
 </p>
@@ -431,9 +457,9 @@ Look around, then travel back to present times
 </div>
 </div>
 
-<div id="outline-container-orge201507" class="outline-2">
-<h2 id="orge201507"><span class="section-number-2">7.</span> Let's branch out</h2>
-<div class="outline-text-2" id="text-7">
+<div id="outline-container-org6dcab9c" class="outline-2">
+<h2 id="org6dcab9c"><span class="section-number-2">8.</span> Let's branch out</h2>
+<div class="outline-text-2" id="text-8">
 <p>
 Git is very popular for its branching model that allows to work on
 parallel lines of developement. See for yourself:
@@ -520,8 +546,9 @@ You can also try to add the <code>--oneline</code> option to <code>git log</code
 </div>
 </div>
 <div id="postamble" class="status">
+<p class="date">Date: 2022-12-02 Fri 00:00</p>
 <p class="author">Author: Thibault Lestang</p>
-<p class="date">Created: 2022-12-01 Thu 22:14</p>
+<p class="date">Created: 2022-12-02 Fri 09:08</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
