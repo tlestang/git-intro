@@ -11,7 +11,7 @@ https://tlestang.github.io/git-intro/git-taster.html
 * Setup
 
 #+begin_src shell
-  git clone https://github.com/tlestang/git-intro.git
+  git clone https://github.com:tlestang/git-intro.git
   cd git-intro/taster
 #+end_src
 
