@@ -1,0 +1,185 @@
+#+LATEX_HEADER: \usepackage{geometry}[bottom=2cm, top=2cm, left=2cm, right=2cm]
+#+OPTIONS: author:nil date:nil toc:nil
+#+TITLE:Tracking changes
+
+* Making the initial commit
+
+Let's work on a simple python script that reads, plot and fit CSV
+data. We start by reading some example data:
+
+#+begin_src python
+  import numpy as np
+  data = np.loadtxt("example_data.csv", delimiter=",")
+#+end_src
+
+=git status= outputs information about the state of our project. If we
+try it we see that Git has nothing to report on.
+
+#+begin_src shell
+  git status
+#+end_src
+
+But we have a python script in the directory!? Git doesn't
+automatically track all the files in a directory. We ask git to start
+tracking our script:
+
+#+begin_src shell
+  git add fit_data.py
+#+end_src
+
+Now we can record the state of our file (make our first snapshot)
+
+#+begin_src shell
+  git commit
+#+end_src
+
+* Displaying changes
+
+Let's plot our data using matplotlib
+
+#+begin_src diff
+  diff --git a/fit_data.py b/fit_data.py
+  index 6027a65..d5affde 100644
+  --- a/fit_data.py
+  +++ b/fit_data.py
+  @@ -1,4 +1,6 @@
+   import numpy as np
+  +import matplotlib.pyplot as plt
+ 
+   data = np.loadtxt("example_data.csv", delimiter=",", skiprows=1)
+  -                  
+  +plt.plot(data[:, 0], data[:, 1])
+  +plt.show()
+#+end_src
+
+we can check the status of our repository
+#+begin_src shell
+  git status
+#+end_src
+
+This tells us that we modified ~fit_data.py~ since the last recorded
+snapshot. We can ask git to print what changed since
+#+begin_src shell
+  git diff
+#+end_src
+
+* The staging area
+
+Let's add a comment describing our data file:
+#+begin_src
+  # xdata,ydata
+  -2,0.699369
+  -1.64,0.700462
+  -1.33,0.695354
+  -0.7,1.03905
+  0,1.97389
+  0.45,2.41143
+  1.2,1.91091
+  1.64,0.919576
+  2.32,-0.730975
+  2.9,-1.42001
+#+end_src
+
+Let's take another snapshot to save the state of our script:
+#+begin_src shell
+  git commit
+#+end_src
+
+This time we don't get our editor and the output is the same that ~git
+status~. Notice the last line:
+
+#+begin_example
+  no changes added to commit (use "git add" and/or "git commit -a")
+#+end_example
+
+A git commit is actually a snapshot of the project plus differences
+included in the /staging area/ or (/index/).  This is an intermediate
+place between the working directory and the git database that is used
+to prepare commits. It's like taking group photos at an event: you
+group people together, leaving some aside, and you take a picture. In
+git, you group some changes together in the staging area, and you make
+a commit.
+
+[[file:img/git-staging-area.png]]
+
+Let's add our file to the staging area:
+
+#+begin_src shell
+  git add fit_data.py
+#+end_src
+
+now ~git status~ tells us that the file is ready to be commited in our
+next commit
+
+#+begin_src shell
+  git status
+#+end_src
+
+Importantly, our change to the =example_data.csv= file is not added to
+the staging area, and therefore will not be included in the recorded
+snapshot.
+
+Let's go
+
+#+begin_src shell
+  git commit -m "Plot data using matplotlib"
+#+end_src
+
+We can now commit the remaining change to =example_data.csv=:
+#+begin_src shell
+  git commit -am "Include header in example data file"
+#+end_src
+
+* Displaying history
+
+So far we've been tracking changes to our script, and we can now
+benefit from this by looking back in time.
+
+#+begin_src shell
+  git log
+#+end_src
+
+We can see our two snapshots have been recorded:
+- Author and date
+- Unique identifier (based on author, date, message and changes)
+
+We can ask git to print the changes associated to each commit
+
+#+begin_src shell
+  git log --patch # (or -p)
+#+end_src
+
+* Git is line-oriented
+
+Let's introduce a temporary variable to avoid hardcoing the name of
+our data file in the call to ~loadtxt~.
+
+Git *tracks changes in lines*:
+#+begin_src shell :results output
+  git diff
+#+end_src
+
+#+RESULTS:
+#+begin_example
+diff --git a/fit_data.py b/fit_data.py
+index d5affde..1c37f09 100644
+--- a/fit_data.py
++++ b/fit_data.py
+@@ -1,6 +1,7 @@
+ import numpy as np
+ import matplotlib.pyplot as plt
+ 
+-data = np.loadtxt("example_data.csv", delimiter=",", skiprows=1)
++filename = "example_data.csv"
++data = np.loadtxt(filename, delimiter=",", skiprows=1)
+ plt.plot(data[:, 0], data[:, 1])
+ plt.show()
+#+end_example
+
+For Git, the whole ~loadtxt~ line changed, even though we only changed
+part of it.
+
+Let's commit this change.
+#+begin_src shell
+  git commit -m "temp variable"
+#+end_src
