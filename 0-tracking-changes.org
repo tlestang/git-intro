@@ -7,9 +7,10 @@
 Let's work on a simple python script that reads, plot and fit CSV
 data. We start by reading some example data:
 
-#+begin_src python
-  import numpy as np
-  data = np.loadtxt("example_data.csv", delimiter=",")
+#+begin_src python :tangle 0-tracking-changes/plot_data.py :exports code
+  import numpy
+
+  data = numpy.loadtxt("example_data.csv", delimiter=",")
 #+end_src
 
 =git status= outputs information about the state of our project. If we
@@ -24,7 +25,7 @@ automatically track all the files in a directory. We ask git to start
 tracking our script:
 
 #+begin_src shell
-  git add fit_data.py
+  git add plot_data.py
 #+end_src
 
 Now we can record the state of our file (make our first snapshot)
@@ -38,49 +39,67 @@ Now we can record the state of our file (make our first snapshot)
 Let's plot our data using matplotlib
 
 #+begin_src diff
-  diff --git a/fit_data.py b/fit_data.py
+  diff --git a/plot_data.py b/plot_data.py
   index 6027a65..d5affde 100644
   --- a/fit_data.py
   +++ b/fit_data.py
-  @@ -1,4 +1,6 @@
-   import numpy as np
+  @@ -1,3 +1,5 @@
+   import numpy
   +import matplotlib.pyplot as plt
- 
-   data = np.loadtxt("example_data.csv", delimiter=",", skiprows=1)
-  -                  
+
+   data = numpy.loadtxt("example_data.csv", delimiter=",")
   +plt.plot(data[:, 0], data[:, 1])
-  +plt.show()
 #+end_src
 
 we can check the status of our repository
+
 #+begin_src shell
   git status
 #+end_src
 
 This tells us that we modified ~fit_data.py~ since the last recorded
 snapshot. We can ask git to print what changed since
+
 #+begin_src shell
   git diff
 #+end_src
 
 * The staging area
 
-Let's add a comment describing our data file:
-#+begin_src
-  # xdata,ydata
-  -2,0.699369
-  -1.64,0.700462
-  -1.33,0.695354
-  -0.7,1.03905
-  0,1.97389
-  0.45,2.41143
-  1.2,1.91091
-  1.64,0.919576
-  2.32,-0.730975
-  2.9,-1.42001
+Let's make two changes.
+
+First, add a comment describing the two columns in the data file
+=example_data.csv=:
+
+#+begin_src diff :exports code
+  diff --git a/0-tracking-changes/example_data.csv b/0-tracking-changes/example_data.csv
+  index b17ee9d..8ab8126 100644
+  --- a/0-tracking-changes/example_data.csv
+  +++ b/0-tracking-changes/example_data.csv
+  @@ -1,3 +1,4 @@
+  +# xdata,ydata
+   -2,0.699369
+   -1.64,0.700462
+   -1.33,0.695354
 #+end_src
 
-Let's take another snapshot to save the state of our script:
+Second, modify the python script =plot_data.py= to add a title to the
+figure:
+
+#+begin_src diff :exports code
+  diff --git a/0-tracking-changes/plot_data.py b/0-tracking-changes/plot_data.py
+  index b4ac3ee..115d618 100644
+  --- a/0-tracking-changes/plot_data.py
+  +++ b/0-tracking-changes/plot_data.py
+  @@ -3,3 +3,4 @@ import matplotlib.pyplot as plt
+
+   data = numpy.loadtxt("example_data.csv", delimiter=",")
+   plt.plot(data[0], data[1])
+  +plt.title("A title")
+#+end_src
+
+Try to record a new version with =git commit=:
+
 #+begin_src shell
   git commit
 #+end_src
@@ -92,61 +111,99 @@ status~. Notice the last line:
   no changes added to commit (use "git add" and/or "git commit -a")
 #+end_example
 
-A git commit is actually a snapshot of the project plus differences
-included in the /staging area/ or (/index/).  This is an intermediate
-place between the working directory and the git database that is used
-to prepare commits. It's like taking group photos at an event: you
-group people together, leaving some aside, and you take a picture. In
-git, you group some changes together in the staging area, and you make
-a commit.
+Git makes use of the concept of the /staging area/ (otherwise known as
+the /index/).  The staging area is an intermediate place between the
+working directory and the database of recorded versions. To be
+included in the next version, changes must be added to the staging
+area first. By default, the staging area is empty: recording a version
+with =git commit= doesn't make sense since this this version would be
+no different than the previous one. In this case, Git does not add a
+new version and instead print the output of =git status=, prompting
+you to add changes to staging area.
 
-[[file:img/git-staging-area.png]]
-
-Let's add our file to the staging area:
+Let's record a new version that includes the change you made to Python
+script (adding a title to the figure), but not the change made to the
+data file. Start by adding all changes made to the the Python script
+=plot_data.py= to the staging area:
 
 #+begin_src shell
-  git add fit_data.py
+  git add plot_data.py
 #+end_src
 
-now ~git status~ tells us that the file is ready to be commited in our
-next commit
+Display the status of the repository:
 
 #+begin_src shell
   git status
 #+end_src
 
-Importantly, our change to the =example_data.csv= file is not added to
-the staging area, and therefore will not be included in the recorded
-snapshot.
-
-Let's go
+Next, display the current differences with
 
 #+begin_src shell
-  git commit -m "Plot data using matplotlib"
+  git diff
 #+end_src
 
-We can now commit the remaining change to =example_data.csv=:
+What does this output tells you about the behavior of =git diff=?
+
+It was stated above that the =git diff= command outputs the
+differences between the current working directory and the last
+recorded snapshot. This is, in fact, inaccurate. The =git diff=
+command outputs the differences between the working directory and the
+last recorded snapshot, minus whatever changes are currently added in
+the staging area, and therefore ready to be recorded in the next
+version. In other words, =git diff= display *the differences between
+the working directory and the next recorded version*.
+
+Use =git diff= to display the content of the staging area:
+
 #+begin_src shell
-  git commit -am "Include header in example data file"
+  git diff --staged
 #+end_src
 
-* Displaying history
-
-So far we've been tracking changes to our script, and we can now
-benefit from this by looking back in time.
+Finally, record a new version including the changes above:
 
 #+begin_src shell
+  git commit -m "Add a title to the figure"
+#+end_src
+
+Repeat the =git add/commit= procedure to record a new version
+including the changes made to the data file =example_data.csv=.
+
+[[file:img/git-staging-area.png]]
+
+* Displaying the log of changes
+
+Git provides a wealth of tools to display and analyse the history of a
+project. The main entry point to these functionalities is the =git
+log= command.
+
+#+begin_src shell :exports code
   git log
 #+end_src
 
-We can see our two snapshots have been recorded:
-- Author and date
-- Unique identifier (based on author, date, message and changes)
+#+begin_src shell :exports results
+  git log -n 3
+#+end_src
 
-We can ask git to print the changes associated to each commit
+You go up and down the list by using the up and down arrow keys on
+your keyboard. You can also use the space key to scroll throught one
+page at a time. *To exit, press the =q= key*.
 
-#+begin_src shell
+The =git log= command prints a list of all our versions
+back to the first recorded one (known as the /root commit/). By
+default, =git log= includes:
+
+- Author and date.
+- Commit message.
+- Unique identifier.
+
+Ask Git to print the changes associated to each commit:
+
+#+begin_src shell :exports code
   git log --patch # (or -p)
+#+end_src
+
+#+begin_src shell :exports results
+  git log -p -3
 #+end_src
 
 * Git is line-oriented
@@ -154,32 +211,36 @@ We can ask git to print the changes associated to each commit
 Let's introduce a temporary variable to avoid hardcoing the name of
 our data file in the call to ~loadtxt~.
 
-Git *tracks changes in lines*:
-#+begin_src shell :results output
+#+begin_src diff
+  diff --git a/plot_data.py b/plot_data.py
+  index d5affde..1c37f09 100644
+  --- a/fit_data.py
+  +++ b/fit_data.py
+  @@ -1,5 +1,6 @@
+   import numpy
+   import matplotlib.pyplot as plt
+
+  -data = np.loadtxt("example_data.csv", delimiter=",")
+  +filename = "example_data.csv"
+  +data = np.loadtxt(filename, delimiter=",")
+   plt.plot(data[:, 0], data[:, 1])
+#+end_src
+
+Use =git diff= to visualise your changes:
+
+#+begin_src shell
   git diff
 #+end_src
 
-#+RESULTS:
-#+begin_example
-diff --git a/fit_data.py b/fit_data.py
-index d5affde..1c37f09 100644
---- a/fit_data.py
-+++ b/fit_data.py
-@@ -1,6 +1,7 @@
- import numpy as np
- import matplotlib.pyplot as plt
- 
--data = np.loadtxt("example_data.csv", delimiter=",", skiprows=1)
-+filename = "example_data.csv"
-+data = np.loadtxt(filename, delimiter=",", skiprows=1)
- plt.plot(data[:, 0], data[:, 1])
- plt.show()
-#+end_example
+Alternatively, you can use the =--stat= option to display the number
+of lines added and removed -- among other things.
 
-For Git, the whole ~loadtxt~ line changed, even though we only changed
-part of it.
-
-Let's commit this change.
 #+begin_src shell
-  git commit -m "temp variable"
+  git diff --stat
 #+end_src
+
+Git counts two one line removed, and two lines added. Even though you
+changes only part of a line, Git considers that the whole line
+changed, replace by another one.
+
+*Lesson: for Git, the smallest unit of change is the line.*
