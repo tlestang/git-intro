@@ -1,11 +1,20 @@
+#+PROPERTY: header-args :dir 0-tracking-changes
 #+LATEX_HEADER: \usepackage{geometry}[bottom=2cm, top=2cm, left=2cm, right=2cm]
 #+OPTIONS: author:nil date:nil toc:nil
+
 #+TITLE:Tracking changes
+#+INCLUDE: init.inc
+#+CALL: init()
 
-* Making the initial commit
+* Initializing the repository
 
-Let's work on a simple python script that reads, plot and fit CSV
-data. We start by reading some example data:
+A /repository/ refers to a directory containing a database of
+versions. With Git, the database of versions -- along with various
+other settings -- is contained in a hidden =.git/= directory inside a
+repository.
+
+We start with a directory =0-tracking-changes= that contains a Python
+script =plot_data.py= as well as some data file =example_data.csv=.
 
 #+begin_src python :tangle 0-tracking-changes/plot_data.py :exports code
   import numpy
@@ -13,36 +22,83 @@ data. We start by reading some example data:
   data = numpy.loadtxt("example_data.csv", delimiter=",")
 #+end_src
 
-=git status= outputs information about the state of our project. If we
-try it we see that Git has nothing to report on.
+#+RESULTS:
 
-#+begin_src shell
+#+begin_src yaml :tangle 0-tracking-changes/example_data.csv :exports code
+  -2,0.699369
+  -1.64,0.700462
+  -1.33,0.695354
+  -0.7,1.03905
+  0,1.97389
+  0.45,2.41143
+  1.2,1.91091
+  1.64,0.919576
+  2.32,-0.730975
+  2.9,-1.42001
+#+end_src
+
+
+To make this directory a Git repository, change to it (using the =cd=
+command) and run
+
+#+begin_src shell :results output :exports both
+  git init
+#+end_src
+
+#+RESULTS:
+: Reinitialized existing Git repository in /mnt/shared/scratch/repos/git-intro/0-tracking-changes/.git/
+
+* Making the initial commit
+
+Let's work on a simple python script that reads, plot and fit CSV
+data. We start by reading some example data:
+
+The output of =git status= displays information about the state of your
+project. If we try it we see that Git has nothing to report on.
+
+#+begin_src shell :results output :exports both
   git status
 #+end_src
 
-But we have a python script in the directory!? Git doesn't
-automatically track all the files in a directory. We ask git to start
-tracking our script:
+#+RESULTS:
+: On branch main
+: Untracked files:
+:   (use "git add <file>..." to include in what will be committed)
+: 	plot_data.py.orig
+: 	plot_data.py.rej
+:
+: nothing added to commit but untracked files present (use "git add" to track)
 
-#+begin_src shell
-  git add plot_data.py
+Let's do as we are told and run
+
+#+begin_src shell :results output :exports both
+  git add plot_data.py example_data.csv
 #+end_src
 
-Now we can record the state of our file (make our first snapshot)
+#+RESULTS:
 
-#+begin_src shell
+You can now record the state of our file, /i.e./ take your first
+snapshot.
+
+#+begin_src shell :exports code
   git commit
 #+end_src
+
+#+begin_src shell :results output :exports results
+  git commit -m "Add Python script"
+#+end_src
+
+#+RESULTS:
 
 * Displaying changes
 
 Let's plot our data using matplotlib
 
-#+begin_src diff
+#+begin_src diff :results output :exports code
   diff --git a/plot_data.py b/plot_data.py
   index 6027a65..d5affde 100644
-  --- a/fit_data.py
-  +++ b/fit_data.py
+  --- a/plot_data.py
+  +++ b/plot_data.py
   @@ -1,3 +1,5 @@
    import numpy
   +import matplotlib.pyplot as plt
@@ -51,18 +107,44 @@ Let's plot our data using matplotlib
   +plt.plot(data[:, 0], data[:, 1])
 #+end_src
 
-we can check the status of our repository
+#+RESULTS:
+: patching file plot_data.py
 
-#+begin_src shell
+Check the status of your repository with =git status=
+
+#+begin_src shell :results output :exports both
   git status
 #+end_src
 
-This tells us that we modified ~fit_data.py~ since the last recorded
-snapshot. We can ask git to print what changed since
+#+RESULTS:
+: On branch main
+: Changes not staged for commit:
+:   (use "git add <file>..." to update what will be committed)
+:   (use "git restore <file>..." to discard changes in working directory)
+: 	modified:   plot_data.py
+:
+: no changes added to commit (use "git add" and/or "git commit -a")
 
-#+begin_src shell
+The above tells us that we modified ~plot_data.py~ since the last
+recorded snapshot. We can ask git to print what changed since
+
+#+begin_src shell :results output :exports both
   git diff
 #+end_src
+
+#+RESULTS:
+#+begin_example
+diff --git a/plot_data.py b/plot_data.py
+index 150a31c..4dea0d2 100644
+--- a/plot_data.py
++++ b/plot_data.py
+@@ -1,3 +1,5 @@
+ import numpy
++import matplotlib.pyplot as plt
+
+ data = numpy.loadtxt("example_data.csv", delimiter=",")
++plt.plot(data[:, 0], data[:, 1])
+#+end_example
 
 * The staging area
 
@@ -72,10 +154,10 @@ First, add a comment describing the two columns in the data file
 =example_data.csv=:
 
 #+begin_src diff :exports code
-  diff --git a/0-tracking-changes/example_data.csv b/0-tracking-changes/example_data.csv
+  diff --git a/example_data.csv b/example_data.csv
   index b17ee9d..8ab8126 100644
-  --- a/0-tracking-changes/example_data.csv
-  +++ b/0-tracking-changes/example_data.csv
+  --- a/example_data.csv
+  +++ b/example_data.csv
   @@ -1,3 +1,4 @@
   +# xdata,ydata
    -2,0.699369
@@ -83,26 +165,53 @@ First, add a comment describing the two columns in the data file
    -1.33,0.695354
 #+end_src
 
+#+RESULTS:
+: patching file example_data.csv
+
 Second, modify the python script =plot_data.py= to add a title to the
 figure:
 
 #+begin_src diff :exports code
-  diff --git a/0-tracking-changes/plot_data.py b/0-tracking-changes/plot_data.py
+  diff --git a/plot_data.py b/plot_data.py
   index b4ac3ee..115d618 100644
-  --- a/0-tracking-changes/plot_data.py
-  +++ b/0-tracking-changes/plot_data.py
+  --- a/plot_data.py
+  +++ b/plot_data.py
   @@ -3,3 +3,4 @@ import matplotlib.pyplot as plt
 
    data = numpy.loadtxt("example_data.csv", delimiter=",")
-   plt.plot(data[0], data[1])
+   plt.plot(data[:, 0], data[:, 1])
   +plt.title("A title")
 #+end_src
 
+#+RESULTS:
+: patching file plot_data.py
+
 Try to record a new version with =git commit=:
 
-#+begin_src shell
+#+begin_src shell :exports code
   git commit
 #+end_src
+
+#+begin_src shell :results output :exports results
+  git status
+#+end_src
+
+#+RESULTS:
+#+begin_example
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   example_data.csv
+	modified:   plot_data.py
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	plot_data.py.orig
+	plot_data.py.rej
+
+no changes added to commit (use "git add" and/or "git commit -a")
+#+end_example
 
 This time we don't get our editor and the output is the same that ~git
 status~. Notice the last line:
@@ -126,21 +235,53 @@ script (adding a title to the figure), but not the change made to the
 data file. Start by adding all changes made to the the Python script
 =plot_data.py= to the staging area:
 
-#+begin_src shell
+#+begin_src shell :results output :exports both
   git add plot_data.py
 #+end_src
 
-Display the status of the repository:
+#+RESULTS:
 
-#+begin_src shell
+Use =git status= to display the status of the repository:
+
+#+begin_src shell :results output :exports both
   git status
 #+end_src
 
+#+RESULTS:
+#+begin_example
+On branch main
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+	modified:   plot_data.py
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   example_data.csv
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	plot_data.py.orig
+	plot_data.py.rej
+
+#+end_example
+
 Next, display the current differences with
 
-#+begin_src shell
+#+begin_src shell :results output :exports both
   git diff
 #+end_src
+
+#+RESULTS:
+: diff --git a/example_data.csv b/example_data.csv
+: index 7eab533..ad38f59 100644
+: --- a/example_data.csv
+: +++ b/example_data.csv
+: @@ -1,3 +1,4 @@
+: +# xdata,ydata
+:  -2,0.699369
+:  -1.64,0.700462
+:  -1.33,0.695354
 
 What does this output tells you about the behavior of =git diff=?
 
@@ -155,20 +296,42 @@ the working directory and the next recorded version*.
 
 Use =git diff= to display the content of the staging area:
 
-#+begin_src shell
+#+begin_src shell :results output :exports both
   git diff --staged
 #+end_src
 
+#+RESULTS:
+#+begin_example
+diff --git a/plot_data.py b/plot_data.py
+index 150a31c..85bbb3b 100644
+--- a/plot_data.py
++++ b/plot_data.py
+@@ -1,3 +1,6 @@
+ import numpy
++import matplotlib.pyplot as plt
+
+ data = numpy.loadtxt("example_data.csv", delimiter=",")
++plt.plot(data[:, 0], data[:, 1])
++plt.title("A title")
+#+end_example
+
 Finally, record a new version including the changes above:
 
-#+begin_src shell
+#+begin_src shell :results output :exports both
   git commit -m "Add a title to the figure"
 #+end_src
+
+#+RESULTS:
+: [main 8a780ee] Add a title to the figure
+:  1 file changed, 3 insertions(+)
 
 Repeat the =git add/commit= procedure to record a new version
 including the changes made to the data file =example_data.csv=.
 
-[[file:img/git-staging-area.png]]
+#+begin_src shell :results output :exports both
+  git add example_data.csv
+  git commit -m "Add header to CSV data file"
+#+end_src
 
 * Displaying the log of changes
 
@@ -176,11 +339,11 @@ Git provides a wealth of tools to display and analyse the history of a
 project. The main entry point to these functionalities is the =git
 log= command.
 
-#+begin_src shell :exports code
+#+begin_src :results output shell :exports code
   git log
 #+end_src
 
-#+begin_src shell :exports results
+#+begin_src :results output shell :exports results
   git log -n 3
 #+end_src
 
@@ -202,7 +365,7 @@ Ask Git to print the changes associated to each commit:
   git log --patch # (or -p)
 #+end_src
 
-#+begin_src shell :exports results
+#+begin_src shell :results output :exports results
   git log -p -3
 #+end_src
 
@@ -211,11 +374,11 @@ Ask Git to print the changes associated to each commit:
 Let's introduce a temporary variable to avoid hardcoing the name of
 our data file in the call to ~loadtxt~.
 
-#+begin_src diff
+#+begin_src diff :exports code
   diff --git a/plot_data.py b/plot_data.py
   index d5affde..1c37f09 100644
-  --- a/fit_data.py
-  +++ b/fit_data.py
+  --- a/plot_data.py
+  +++ b/plot_data.py
   @@ -1,5 +1,6 @@
    import numpy
    import matplotlib.pyplot as plt
@@ -228,14 +391,14 @@ our data file in the call to ~loadtxt~.
 
 Use =git diff= to visualise your changes:
 
-#+begin_src shell
+#+begin_src shell :results output :exports both
   git diff
 #+end_src
 
 Alternatively, you can use the =--stat= option to display the number
 of lines added and removed -- among other things.
 
-#+begin_src shell
+#+begin_src shell :results output :exports both
   git diff --stat
 #+end_src
 
