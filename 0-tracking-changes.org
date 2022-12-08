@@ -1,10 +1,17 @@
-#+PROPERTY: header-args :dir 0-tracking-changes
-#+LATEX_HEADER: \usepackage{geometry}[bottom=2cm, top=2cm, left=2cm, right=2cm]
-#+OPTIONS: author:nil date:nil toc:nil
+# -*- org-confirm-babel-evaluate: nil; org-html-htmlize-output-type: css; -*-
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="rethink_inline.css"/>
+#+HTML_HEAD_EXTRA: <link rel="highlighting" type="text/css" href="highlighting.css"/>
 
-#+TITLE:Tracking changes
+#+LATEX_HEADER: \usepackage{geometry}[bottom=2cm, top=2cm, left=2cm, right=2cm]
+
+#+PROPERTY: header-args :dir 0-tracking-changes
+
 #+INCLUDE: init.inc
 #+CALL: init()
+
+#+TITLE:Tracking changes
+#+AUTHOR: Thibault Lestang
+#+DATE: nil
 
 * Initializing the repository
 
@@ -21,8 +28,6 @@ script =plot_data.py= as well as some data file =example_data.csv=.
 
   data = numpy.loadtxt("example_data.csv", delimiter=",")
 #+end_src
-
-#+RESULTS:
 
 #+begin_src yaml :tangle 0-tracking-changes/example_data.csv :exports code
   -2,0.699369
@@ -45,9 +50,6 @@ command) and run
   git init
 #+end_src
 
-#+RESULTS:
-: Reinitialized existing Git repository in /mnt/shared/scratch/repos/git-intro/0-tracking-changes/.git/
-
 * Making the initial commit
 
 Let's work on a simple python script that reads, plot and fit CSV
@@ -60,22 +62,11 @@ project. If we try it we see that Git has nothing to report on.
   git status
 #+end_src
 
-#+RESULTS:
-: On branch main
-: Untracked files:
-:   (use "git add <file>..." to include in what will be committed)
-: 	plot_data.py.orig
-: 	plot_data.py.rej
-:
-: nothing added to commit but untracked files present (use "git add" to track)
-
 Let's do as we are told and run
 
 #+begin_src shell :results output :exports both
   git add plot_data.py example_data.csv
 #+end_src
-
-#+RESULTS:
 
 You can now record the state of our file, /i.e./ take your first
 snapshot.
@@ -88,13 +79,18 @@ snapshot.
   git commit -m "Add Python script"
 #+end_src
 
-#+RESULTS:
-
 * Displaying changes
 
 Let's plot our data using matplotlib
 
-#+begin_src diff :results output :exports code
+# A source code block marked with ":exports code" will not be
+# evaluated on exporting.  It makes sense if the point of of
+# evaluationf a source block is to view its output.  But not so true
+# for diff blocks.
+
+# 2022-12-08 Using ":exports both" for now.
+
+#+begin_src diff :results output :exports both
   diff --git a/plot_data.py b/plot_data.py
   index 6027a65..d5affde 100644
   --- a/plot_data.py
@@ -107,23 +103,11 @@ Let's plot our data using matplotlib
   +plt.plot(data[:, 0], data[:, 1])
 #+end_src
 
-#+RESULTS:
-: patching file plot_data.py
-
 Check the status of your repository with =git status=
 
 #+begin_src shell :results output :exports both
   git status
 #+end_src
-
-#+RESULTS:
-: On branch main
-: Changes not staged for commit:
-:   (use "git add <file>..." to update what will be committed)
-:   (use "git restore <file>..." to discard changes in working directory)
-: 	modified:   plot_data.py
-:
-: no changes added to commit (use "git add" and/or "git commit -a")
 
 The above tells us that we modified ~plot_data.py~ since the last
 recorded snapshot. We can ask git to print what changed since
@@ -132,20 +116,6 @@ recorded snapshot. We can ask git to print what changed since
   git diff
 #+end_src
 
-#+RESULTS:
-#+begin_example
-diff --git a/plot_data.py b/plot_data.py
-index 150a31c..4dea0d2 100644
---- a/plot_data.py
-+++ b/plot_data.py
-@@ -1,3 +1,5 @@
- import numpy
-+import matplotlib.pyplot as plt
-
- data = numpy.loadtxt("example_data.csv", delimiter=",")
-+plt.plot(data[:, 0], data[:, 1])
-#+end_example
-
 * The staging area
 
 Let's make two changes.
@@ -153,7 +123,7 @@ Let's make two changes.
 First, add a comment describing the two columns in the data file
 =example_data.csv=:
 
-#+begin_src diff :exports code
+#+begin_src diff :exports both
   diff --git a/example_data.csv b/example_data.csv
   index b17ee9d..8ab8126 100644
   --- a/example_data.csv
@@ -165,13 +135,10 @@ First, add a comment describing the two columns in the data file
    -1.33,0.695354
 #+end_src
 
-#+RESULTS:
-: patching file example_data.csv
-
 Second, modify the python script =plot_data.py= to add a title to the
 figure:
 
-#+begin_src diff :exports code
+#+begin_src diff :exports both
   diff --git a/plot_data.py b/plot_data.py
   index b4ac3ee..115d618 100644
   --- a/plot_data.py
@@ -183,9 +150,6 @@ figure:
   +plt.title("A title")
 #+end_src
 
-#+RESULTS:
-: patching file plot_data.py
-
 Try to record a new version with =git commit=:
 
 #+begin_src shell :exports code
@@ -195,23 +159,6 @@ Try to record a new version with =git commit=:
 #+begin_src shell :results output :exports results
   git status
 #+end_src
-
-#+RESULTS:
-#+begin_example
-On branch main
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	modified:   example_data.csv
-	modified:   plot_data.py
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	plot_data.py.orig
-	plot_data.py.rej
-
-no changes added to commit (use "git add" and/or "git commit -a")
-#+end_example
 
 This time we don't get our editor and the output is the same that ~git
 status~. Notice the last line:
@@ -239,49 +186,17 @@ data file. Start by adding all changes made to the the Python script
   git add plot_data.py
 #+end_src
 
-#+RESULTS:
-
 Use =git status= to display the status of the repository:
 
 #+begin_src shell :results output :exports both
   git status
 #+end_src
 
-#+RESULTS:
-#+begin_example
-On branch main
-Changes to be committed:
-  (use "git restore --staged <file>..." to unstage)
-	modified:   plot_data.py
-
-Changes not staged for commit:
-  (use "git add <file>..." to update what will be committed)
-  (use "git restore <file>..." to discard changes in working directory)
-	modified:   example_data.csv
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	plot_data.py.orig
-	plot_data.py.rej
-
-#+end_example
-
 Next, display the current differences with
 
 #+begin_src shell :results output :exports both
   git diff
 #+end_src
-
-#+RESULTS:
-: diff --git a/example_data.csv b/example_data.csv
-: index 7eab533..ad38f59 100644
-: --- a/example_data.csv
-: +++ b/example_data.csv
-: @@ -1,3 +1,4 @@
-: +# xdata,ydata
-:  -2,0.699369
-:  -1.64,0.700462
-:  -1.33,0.695354
 
 What does this output tells you about the behavior of =git diff=?
 
@@ -300,30 +215,11 @@ Use =git diff= to display the content of the staging area:
   git diff --staged
 #+end_src
 
-#+RESULTS:
-#+begin_example
-diff --git a/plot_data.py b/plot_data.py
-index 150a31c..85bbb3b 100644
---- a/plot_data.py
-+++ b/plot_data.py
-@@ -1,3 +1,6 @@
- import numpy
-+import matplotlib.pyplot as plt
-
- data = numpy.loadtxt("example_data.csv", delimiter=",")
-+plt.plot(data[:, 0], data[:, 1])
-+plt.title("A title")
-#+end_example
-
 Finally, record a new version including the changes above:
 
 #+begin_src shell :results output :exports both
   git commit -m "Add a title to the figure"
 #+end_src
-
-#+RESULTS:
-: [main 8a780ee] Add a title to the figure
-:  1 file changed, 3 insertions(+)
 
 Repeat the =git add/commit= procedure to record a new version
 including the changes made to the data file =example_data.csv=.
@@ -374,19 +270,20 @@ Ask Git to print the changes associated to each commit:
 Let's introduce a temporary variable to avoid hardcoing the name of
 our data file in the call to ~loadtxt~.
 
-#+begin_src diff :exports code
+#+begin_src diff :exports both
   diff --git a/plot_data.py b/plot_data.py
   index d5affde..1c37f09 100644
   --- a/plot_data.py
   +++ b/plot_data.py
-  @@ -1,5 +1,6 @@
+  @@ -1,6 +1,7 @@
    import numpy
    import matplotlib.pyplot as plt
 
-  -data = np.loadtxt("example_data.csv", delimiter=",")
+  -data = numpy.loadtxt("example_data.csv", delimiter=",")
   +filename = "example_data.csv"
-  +data = np.loadtxt(filename, delimiter=",")
+  +data = numpy.loadtxt(filename, delimiter=",")
    plt.plot(data[:, 0], data[:, 1])
+   plt.title("A title")
 #+end_src
 
 Use =git diff= to visualise your changes:
