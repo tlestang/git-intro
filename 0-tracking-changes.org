@@ -1,6 +1,6 @@
 # -*- org-confirm-babel-evaluate: nil; org-html-htmlize-output-type: css; -*-
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="rethink_inline.css"/>
-#+HTML_HEAD_EXTRA: <link rel="highlighting" type="text/css" href="highlighting.css"/>
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/rethink_inline.css"/>
+#+HTML_HEAD_EXTRA: <link rel="highlighting" type="text/css" href="css/highlighting.css"/>
 
 #+LATEX_HEADER: \usepackage{geometry}[bottom=2cm, top=2cm, left=2cm, right=2cm]
 

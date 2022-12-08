@@ -1,4 +1,4 @@
-#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="rethink_inline.css" />
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/rethink_inline.css" />
 
 #+TITLE: Version control with Git: a taster
 #+AUTHOR: Thibault Lestang
