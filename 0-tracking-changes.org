@@ -304,3 +304,6 @@ changes only part of a line, Git considers that the whole line
 changed, replace by another one.
 
 *Lesson: for Git, the smallest unit of change is the line.*
+
+#+CALL: format-patches[:exports none]()
+
