@@ -126,24 +126,25 @@ a total of 4 commits, so we can use
 
 #+CALL: save-patches[:exports result]()
 
-#+begin_src shell
+#+begin_src shell :exports both :results output
   git reset HEAD~3 # HEAD~3 is equivalent to the id of the first commit
 #+end_src
 
 The log (=git log=) now shows only one commit, the first one.  The
 commits are gone, but not the associated changes:
 
-#+begin_src shell :results output
+#+begin_src shell :exports both :results output
   git status
 #+end_src
 
-#+begin_src shell :results output
+#+begin_src shell :exports both :results output
   git diff --stats
 #+end_src
 
 Let's restore the commits
 
 #+begin_src shell :exports both :results output
+  git restore plot_data.py example_data.csv
   git am ../undo_reset/*.patch
 #+end_src
 
@@ -157,3 +158,37 @@ The =git reset --hard= is the nuclear option. It removes the commits
 and undoes the asspciated changes. *Use with the greatest caution*.
 
 * Activity: undoing things
+
+1. The latest commit introduces a typo in spelling the
+   =scipy.optimize= module.  Fix the typo and ammend the commit.
+   *Trick*: use the =--no-edit= switch with =git commit --amend= to
+   specify you don't want to modify the commit message.
+2. Take look at the changes introduced in commit =3880a54= (second
+   from last).  It's one big commit that adds two changes:
+   - Add least-square fitting of the data (and plot of the fitted model).
+   - Change the style of the data points.
+   To maintain a clear history (think about you 6 months from now),
+   let's make two distinct commits: one with the plot style change,
+   and one that introcudes the model fitting.
+   1. Start by discarding the two latest commits, keeping the changes
+      in the working directory:
+      #+begin_src shell :exports code
+	git reset --mixed HEAD~2 # or git reset HEAD~2
+      #+end_src
+   2. Use =git add --patch= to add to the staging area only the
+      changes that are related to fitting the model.  *Hint:* the =git
+      add --patch= command will initially display only one set of
+      change (allso called "hunk").  You can ask Git to split it
+      further by pressing the =s= key.
+   3. Commit your changes with a clear and descriptive message
+   4. add/commit the remaining changes related to plotting the data
+      points.  Remember you can use =git diff=, =git status=, =git
+      log= to visualise the state of the repository and what remains
+      to be commited.
+3. Commit =4b2e7d0= changes the delimiter separating columns in the
+   data file to be a blank space instead of a comma.  Eventually, we
+   learn that the data format will not change and we would like to
+   revert (hint hint) back to using comma.  Add a revert commit using
+   the appropriate command.
+      
+   
