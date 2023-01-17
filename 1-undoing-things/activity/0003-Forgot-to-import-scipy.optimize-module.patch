@@ -1,0 +1,23 @@
+From 8dedae1521accde09582eb8ec73e48e7b4bcf71d Mon Sep 17 00:00:00 2001
+From: Thibault Lestang <thibault.lestang@protonmail.com>
+Date: Tue, 17 Jan 2023 10:26:48 +0000
+Subject: [PATCH 3/3] Forgot to import scipy.optimize module
+
+---
+ plot_data.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/plot_data.py b/plot_data.py
+index bfe3b69..e49b24c 100644
+--- a/plot_data.py
++++ b/plot_data.py
+@@ -1,5 +1,6 @@
+ import numpy
+ import matplotlib.pyplot as plt
++from scipy.optimise import curve_fit
+ 
+ filename = "example_csv.csv"
+ data = numpy.loadtxt(filename, delimiter=" ")
+-- 
+2.30.2
+

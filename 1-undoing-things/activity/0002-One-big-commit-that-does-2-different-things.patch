@@ -1,0 +1,33 @@
+From 3880a549da44a6d8f1486dac989217f9b2c0a795 Mon Sep 17 00:00:00 2001
+From: Thibault Lestang <thibault.lestang@protonmail.com>
+Date: Tue, 17 Jan 2023 10:26:01 +0000
+Subject: [PATCH 2/3] One big commit that does 2 different things
+
+---
+ plot_data.py | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/plot_data.py b/plot_data.py
+index bfc0f47..bfe3b69 100644
+--- a/plot_data.py
++++ b/plot_data.py
+@@ -3,5 +3,15 @@ import matplotlib.pyplot as plt
+ 
+ filename = "example_csv.csv"
+ data = numpy.loadtxt(filename, delimiter=" ")
+-plt.plot(data[:, 0], data[:, 1])
++plt.plot(data[:, 0], data[:, 1], color='red', markerstyle='o')
+ plt.title("A title")
++
++# A function of x with two parameters that we adjust to our data.
++def model(x, p1, p2):
++    return p1 * np.cos(p2 * x) + p2 * np.sin(p1 * x)
++
++# Use scipy.optimize.curve_fit to find the values of parameters that
++# best fit our data (least squares), and plot the resulting polynomial.
++popt, pcov = curve_fit(model, data[:, 0], data[:, 1], p0=(1, 0.2))
++x = np.linspace(-2, 2.9, 100)
++plt.plot(x, model(x, *popt))
+-- 
+2.30.2
+
