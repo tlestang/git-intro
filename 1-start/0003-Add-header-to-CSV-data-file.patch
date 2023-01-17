@@ -1,0 +1,21 @@
+From 18c2cd676d80f9789fcd6ae5f8ec20aaab1520f2 Mon Sep 17 00:00:00 2001
+From: Thibault Lestang <thibault.lestang@protonmail.com>
+Date: Tue, 10 Jan 2023 11:25:22 +0000
+Subject: [PATCH 3/3] Add header to CSV data file
+
+---
+ example_data.csv | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/example_data.csv b/example_data.csv
+index 7eab533..ad38f59 100644
+--- a/example_data.csv
++++ b/example_data.csv
+@@ -1,3 +1,4 @@
++# xdata,ydata
+ -2,0.699369
+ -1.64,0.700462
+ -1.33,0.695354
+-- 
+2.30.2
+
