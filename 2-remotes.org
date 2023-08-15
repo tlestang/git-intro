@@ -1,0 +1,175 @@
+# -*- org-confirm-babel-evaluate: nil; org-html-htmlize-output-type: css; -*-
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="css/rethink_inline.css"/>
+#+HTML_HEAD_EXTRA: <link rel="stylesheet" type="text/css" href="css/highlighting.css"/>
+
+#+LATEX_HEADER: \usepackage{geometry}[bottom=2cm, top=2cm, left=2cm, right=2cm]
+
+#+PROPERTY: header-args :dir 2-remotes
+
+#+INCLUDE: init_2.inc
+#+CALL: init[:results output]()
+
+#+TITLE:Collaborating
+#+AUTHOR: Thibault Lestang
+#+DATE: nil
+
+* Distributed version control
+
+A fundamental idea behind Git is that every individual collaborating
+on the project owns a *local* copy of the project.  This includes the
+current checked out versions, but also the whole history of changes.
+In practice, this means that any local copy of the repository is
+self-sufficient: it contains everything needed to work on the project,
+past and present.
+
+But how can two or more people, working on their own local copy, share
+their changes with each other?  Consider the following situation:
+1. Alice and Bob both own a local copy of the project.  Both copies
+   are identical at the start.
+2. Alice commits a few changes on her local copy.
+3. How can Bob update his own local copy with Alice's changes?
+
+Git can download changes over the network. In addition to the database
+of versions, Git maintains a list of remote repositories it can talk
+to.  Remote repositories are known as /remotes/.
+
+bob.ae.ac.ic.uk    alice.ae.ac.uk
+
+git remote add alice alice.ae.ic.uk:path/to/project
+git pull alice main
+
+The four main commands to work with remote repositories are
+
+- =git remote= :: to manage the list of remote (e.g. add, remove, display info)
+- =git pull= :: Download changes from remote and integrate them in the
+  local copy's history.
+- =git fetch= :: Download changes from remote, but do not integrate to
+  the local copy's history yet.
+- =git push= :: Upload changes from the local copy to the remote and
+  integrate them to the remote copy's history.
+
+
+* (Centralised) distributed version control
+
+Pulling straight from you collaborators repo(s) isn't very practical.
+You need to know their computer's network address, which likely varies
+over time and depending on where they are physically (which local
+network their machine is connected to).  It would also be helpful to
+define a "reference" copy of the repo that defines the current state
+of the project, as a starting point to newcomers or to make releases.
+
+That's where software forges like GitHub, GitLab, SourceHut or
+CodeBerg come in.  These platforms provide hosting of a copy of the
+project on a server (supposedly) accessible all around the world.
+They also provide a convenient web interface to navigate the
+repository.
+
+Collaborating is now much easier.
+
+bob.ae.ic.ac.uk
+.git/
+plot_data.py
+example_data.csv
+
+git remote add origin git@github.com:project.git
+
+alice.ae.ic.ac.uk
+.git/
+plot_data.py
+example_data.csv
+
+git remote add origin git@github.com:project.git
+
+git@github.com:project.git
+.git/
+
+From alice to github: git push origin main
+From github to bob: git pull origin main
+
+* Activity: working with a GitHub remote
+
+1. Let's start by creating a remote repository on github.com to host a
+   copy of our project's history.
+   1. Log in to your GitHub account on github.com
+   2. On the right hand side, click on the green button "new".
+   3. Under "repository name", fill in "activity-3".  Leave all the
+      other fields blank or with their default values set.
+   4. Click on the green "Create repository" button at the botton of
+      the form.
+2. Now that the remote repository is created, you must register its
+   address in your local copy's list of remotes.
+   #+begin_src shell :exports code
+     # Replace USNERNAME by your GitHub username
+     git remote add github git@github.com:USERNAME/activity-3.git
+   #+end_src
+3. The remote repo is currently empty (no history).  Use =git push= to
+   push the history of changes from your local copy of the =main=
+   branch to the GitHub repo's main. *Hint*: the =git push= command syntax is
+   #+begin_src shell :exports code
+     git push <remote> <localbranch>:<remotebranch>
+   #+end_src
+   Return to github.com.  Any changes?  You may have to refresh the
+   page.
+4. Repository hosting platforms (also known as software /forges/)
+   generally provide a web-based graphical interface to Git.  This
+   means you can perform some Git operation directly from your web
+   browser.  *Use the GitHub interface to make a change*.  You can see
+   on the repository's main dashboard that the commit was added to the
+   GitHub repository's history.  *Should you expect to find the commit
+   on your local copy at this stage?  Check your assumption with =git
+   log=.*
+5. *Pull* the commit from the GitHub repo's =main= branch to your
+   local copy.  The syntax for =git pull= is
+   #+begin_src shell :exports code
+     git pull <remote> <remotebranch>
+   #+end_src
+
+* Remote tracking branches
+
+For each remote that Git knows about, it maintains a list of special
+branches that represent the state of the remote repository.
+
+github.com: ---- A ---- B ---- C <--- github/main
+local copy: ---- A ---- B <--- main
+
+#+begin_quote
+Checkout a remote-tracking branch leads to a detached HEAD state
+because a RT branch cannot be moved (e.g. by commiting).  Therefore
+any commit from a RT branch is dangling.
+#+end_quote
+
+The primary way to update remote-tracking branchs is =git fetch=.
+
+#+begin_src shell :exports both
+  # Download all new changes from remote repo and update remote-tracking
+  # branches.
+  git fetch github
+#+end_src
+
+#+begin_src shell :exports both
+  git log -3 --oneline
+#+end_src
+
+#+begin_src shell :exports both
+  git log -3 --online -- github/main
+#+end_src
+
+To update your local branch =main=, you can merge the remote-tracking
+branch into it
+
+#+begin_src shell :exports both
+  # Merge remote-tracking branch github/main into currently checked out branch
+  git merge github/main
+#+end_src
+
+What is the relationship between =fetch=, =pull= and =merge=?
+
+* Activity: remote tracking branches
+
+branch out of main with one commit
+git fetch repo
+git checkout --track
+
+
+depending
+* Remotes
