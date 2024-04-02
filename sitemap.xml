@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://example.org/tracking-changes/index.html</loc>
+  </url>
+  <url>
+    <loc>https://example.org/tracking-changes/initialising_the_repo/index.html</loc>
+  </url>
+  <url>
+    <loc>https://example.org/tracking-changes/making_the_initial_commit/index.html</loc>
+  </url>
+  <url>
+    <loc>https://example.org/tracking-changes/displaying_changes/index.html</loc>
+  </url>
+  <url>
+    <loc>https://example.org/tracking-changes/the_staging_area/index.html</loc>
+  </url>
+  <url>
+    <loc>https://example.org/tracking-changes/displaying_the_log_of_changes/index.html</loc>
+  </url>
+  <url>
+    <loc>https://example.org/tracking-changes/git_is_line_oriented/index.html</loc>
+  </url>
+  <url>
+    <loc>https://example.org/categories/index.html</loc>
+  </url>
+  <url>
+    <loc>https://example.org/tags/index.html</loc>
+  </url>
+</urlset>

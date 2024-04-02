@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tracking changes on My New Hugo Site</title>
+    <link>https://example.org/tracking-changes/index.html</link>
+    <description>Recent content in Tracking changes on My New Hugo Site</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="https://example.org/tracking-changes/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Initialising the repository</title>
+      <link>https://example.org/tracking-changes/initialising_the_repo/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://example.org/tracking-changes/initialising_the_repo/index.html</guid>
+      <description>A repository refers to a directory containing a database of versions. With Git, the database of versions &amp;ndash; along with various other settings &amp;ndash; is contained in a hidden .git/ directory inside a repository.
+We start with a directory 0-tracking-changes that contains a Python script plot_data.py as well as some data file example_data.csv.
+import numpy data = numpy.loadtxt(&amp;#34;example_data.csv&amp;#34;, delimiter=&amp;#34;,&amp;#34;)-2,0.699369 -1.64,0.700462 -1.33,0.695354 -0.7,1.03905 0,1.97389 0.45,2.41143 1.2,1.91091 1.64,0.919576 2.32,-0.730975 2.9,-1.42001To make this directory a Git repository, change to it (using the cd command) and run</description>
+    </item>
+    <item>
+      <title>Recording the initial version</title>
+      <link>https://example.org/tracking-changes/making_the_initial_commit/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://example.org/tracking-changes/making_the_initial_commit/index.html</guid>
+      <description>The output of git status displays information about the state of your project.
+git statusOn branch main No commits yet Untracked files: (use &amp;#34;git add &amp;lt;file&amp;gt;...&amp;#34; to include in what will be committed) example_data.csv plot_data.py nothing added to commit but untracked files present (use &amp;#34;git add&amp;#34; to track)Git does not automatically track files in the project. To instruct Git to start tracking changes to a particular set of file, use the git add command.</description>
+    </item>
+    <item>
+      <title>Displaying changes</title>
+      <link>https://example.org/tracking-changes/displaying_changes/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://example.org/tracking-changes/displaying_changes/index.html</guid>
+      <description>Let&amp;rsquo;s plot our data using matplotlib
+--- plot_data.py +++ plot_data.py @@ -1,3 +1,5 @@ import numpy +import matplotlib.pyplot as plt data = numpy.loadtxt(&amp;#34;example_data.csv&amp;#34;, delimiter=&amp;#34;,&amp;#34;) +plt.plot(data[:, 0], data[:, 1]) patching file plot_data.pyCheck the status of your repository with git status
+git statusOn branch main Changes not staged for commit: (use &amp;#34;git add &amp;lt;file&amp;gt;...&amp;#34; to update what will be committed) (use &amp;#34;git restore &amp;lt;file&amp;gt;...&amp;#34; to discard changes in working directory) modified: plot_data.py no changes added to commit (use &amp;#34;git add&amp;#34; and/or &amp;#34;git commit -a&amp;#34;)The above tells us that we modified plot_data.</description>
+    </item>
+    <item>
+      <title>Activity 0 - the staging area</title>
+      <link>https://example.org/tracking-changes/the_staging_area/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://example.org/tracking-changes/the_staging_area/index.html</guid>
+      <description>It is very common, when developing software, to make succesive changes that do not relate to each other. This activity introduces the index: a way to control exactly what changes are recorded in the next commited version.
+Start by navigating into the activity directory
+cd activity-0 Use git status and git diff to query the current status of the repository. What does Git say if you try to record a new version?</description>
+    </item>
+    <item>
+      <title>Displaying the log of changes</title>
+      <link>https://example.org/tracking-changes/displaying_the_log_of_changes/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://example.org/tracking-changes/displaying_the_log_of_changes/index.html</guid>
+      <description>Git provides a wealth of tools to display and analyse the history of a project. The main entry point to these functionalities is the git log command.
+git logcommit c2c280731dbbf1149f4a55b715227cd5cecfdc68 Author: Thibault Lestang &amp;lt;contact@thibaultlestang.net&amp;gt; Date: Tue Apr 2 15:55:47 2024 +0200 Add a title to the figure commit 2cbe5bafed62f95457069bfd48fa35e424382985 Author: Thibault Lestang &amp;lt;contact@thibaultlestang.net&amp;gt; Date: Tue Apr 2 15:55:47 2024 +0200 Add header to CSV data file commit 4c22398f521b1fc5893d90e9434bd3ee30b5d9a7 Author: Thibault Lestang &amp;lt;contact@thibaultlestang.</description>
+    </item>
+    <item>
+      <title>Git is line-oriented</title>
+      <link>https://example.org/tracking-changes/git_is_line_oriented/index.html</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://example.org/tracking-changes/git_is_line_oriented/index.html</guid>
+      <description>Let&amp;rsquo;s introduce a temporary variable to avoid hardcoding the name of our data file in the call to loadtxt.
+--- plot_data.py +++ plot_data.py @@ -1,6 +1,7 @@ import numpy import matplotlib.pyplot as plt -data = numpy.loadtxt(&amp;#34;example_data.csv&amp;#34;, delimiter=&amp;#34;,&amp;#34;) +filename = &amp;#34;example_data.csv&amp;#34; +data = numpy.loadtxt(filename, delimiter=&amp;#34;,&amp;#34;) plt.plot(data[:, 0], data[:, 1]) plt.title(&amp;#34;A title&amp;#34;) patching file plot_data.pyUse git diff to visualise your changes:
+git diffdiff --git a/plot_data.py b/plot_data.py index 85bbb3b..549bd9a 100644 --- a/plot_data.py +++ b/plot_data.</description>
+    </item>
+  </channel>
+</rss>
