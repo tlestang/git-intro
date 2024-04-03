@@ -2,16 +2,16 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>My New Hugo Site</title>
-    <link>https://example.org/index.html</link>
+    <link>http://localhost:1313/index.html</link>
     <description>Recent content on My New Hugo Site</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="https://example.org/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Tracking changes</title>
-      <link>https://example.org/tracking-changes/index.html</link>
+      <link>http://localhost:1313/tracking-changes/index.html</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://example.org/tracking-changes/index.html</guid>
+      <guid>http://localhost:1313/tracking-changes/index.html</guid>
       <description>Version control is about tracking changes made to files. In Git, a version refers to a particular state of the project, and version control is achieved by frequently recording this state in a database of versions.
 A useful analogy is to view Git as a special camera, with which you could take snapshots of your project. You start by taking a first picture of the collection of files that make your project: that&amp;rsquo;s your first version.</description>
     </item>
